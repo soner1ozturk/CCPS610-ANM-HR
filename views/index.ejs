@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANM Human Resources</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.theme.min.css">
+    <style>
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .owl-carousel .item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .owl-carousel img {
+            width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="container">
+        <h1>Welcome to ANM Human Resources</h1>
+        <div id="carousel" class="owl-carousel owl-theme">
+            <div class="item"><img src="/images/hr_1.webp" alt="HR Image 1"></div>
+            <div class="item"><img src="/images/hr_2.webp" alt="HR Image 2"></div>
+            <div class="item"><img src="/images/hr_3.webp" alt="HR Image 3"></div>
+        </div>
+    </div>
+    <%- include('footer') %>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/owl-carousel/1.3.3/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            function initializeCarousel() {
+                $("#carousel").owlCarousel({
+                    autoPlay: 3000,
+                    items: 1,
+                    loop: true,
+                    navigation: true,
+                    pagination: true,
+                    transitionStyle: "fade",
+                    stopOnHover: true,
+                    singleItem: true,
+                    responsive: true,
+                    responsiveRefreshRate: 200,
+                    navigationText: ["<", ">"]
+                });
+            }
+
+            function reinitializeCarousel() {
+                $("#carousel").trigger('destroy.owl.carousel');
+                initializeCarousel();
+            }
+
+            // Initialize carousel on document ready
+            initializeCarousel();
+
+            // Reinitialize carousel on window resize
+            $(window).on('resize', function() {
+                reinitializeCarousel();
+            });
+
+            // Ensure the carousel is initialized properly after a delay
+            setTimeout(function() {
+                reinitializeCarousel();
+                $(window).trigger('resize'); // Force a resize event
+            }, 500);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee Information - ANM HR</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="form-container">
+        <h1>Update Employee Information</h1>
+        <form id="updateForm">
+            <label for="employeeId">Employee ID:</label>
+            <input type="text" id="employeeId" name="employeeId" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone">
+            <label for="salary">Salary:</label>
+            <input type="number" id="salary" name="salary">
+            <button type="submit">Update</button>
+        </form>
+    </div>
+    <%- include('footer') %>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>

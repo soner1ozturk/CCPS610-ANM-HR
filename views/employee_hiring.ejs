@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Hiring - ANM HR</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <%- include('navbar') %>
+    <div class="form-container">
+        <h1>Employee Hiring</h1>
+        <form id="hiringForm">
+            <label for="firstName">First Name:</label>
+            <input type="text" id="firstName" name="firstName" required>
+            <label for="lastName">Last Name:</label>
+            <input type="text" id="lastName" name="lastName" required>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" required>
+            <label for="hireDate">Hire Date:</label>
+            <input type="date" id="hireDate" name="hireDate" required>
+            <label for="salary">Salary:</label>
+            <input type="number" id="salary" name="salary" required>
+            <label for="jobId">Job ID:</label>
+            <select id="jobId" name="jobId" required>
+                <option value="1">SA_REP - Sales Representative</option>
+                <option value="2">AC_MGR - Accounting Manager</option>
+                <option value="3">FI_ACCOUNT - Financial Accountant</option>
+            </select>
+            <label for="managerId">Manager ID:</label>
+            <input type="text" id="managerId" name="managerId" required>
+            <label for="departmentId">Department ID:</label>
+            <input type="text" id="departmentId" name="departmentId" required>
+            <button type="submit">Hire</button>
+        </form>
+    </div>
+    <%- include('footer') %>
+    <script src="/js/scripts.js"></script>
+</body>
+</html>
