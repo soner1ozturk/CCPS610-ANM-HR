@@ -1,86 +1,36 @@
-// Employee Hiring Form Submission
-document.getElementById('hiringForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-    fetch('/hire_employee', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-
-// Employee Update Form Submission
-document.getElementById('updateForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-    fetch('/update_employee', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-
-// Employee Search Form Submission
-document.getElementById('searchForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const formData = new FormData(this);
-    fetch('/search_employee', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        const resultsContainer = document.getElementById('searchResults');
-        resultsContainer.innerHTML = '';
-        if (data.results.length > 0) {
-            data.results.forEach(result => {
-                const resultElement = document.createElement('div');
-                resultElement.textContent = `ID: ${result.id}, Name: ${result.name}, Position: ${result.position}`;
-                resultsContainer.appendChild(resultElement);
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch job IDs and populate the dropdown
+    fetch('/jobs')
+        .then(response => response.json())
+        .then(data => {
+            const jobSelect = document.getElementById('jobId');
+            data.jobs.forEach(job => {
+                const option = document.createElement('option');
+                option.value = job.job_id;
+                option.text = `${job.job_id} - ${job.job_title}`;
+                jobSelect.appendChild(option);
             });
-        } else {
-            resultsContainer.textContent = 'No results found.';
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-});
-
-// Carousel Initialization and Reinitialization
-$(document).ready(function() {
-    function initializeCarousel() {
-        $("#carousel").owlCarousel({
-            autoPlay: 3000,
-            items: 1,
-            loop: true,
-            navigation: true,
-            pagination: true,
-            transitionStyle: "fade",
-            stopOnHover: true,
-            singleItem: true,
-            responsive: true,
-            responsiveRefreshRate: 200,
-            navigationText: ["<", ">"]
+        })
+        .catch(error => {
+            console.error('Error fetching jobs:', error);
         });
-    }
 
-    initializeCarousel();
-
-    $(window).on('resize', function() {
-        $("#carousel").trigger('destroy.owl.carousel');
-        initializeCarousel();
+    // Add event listener for job ID dropdown change
+    document.getElementById('jobId').addEventListener('change', function() {
+        const jobId = this.value;
+        if (jobId) {
+            fetch(`/jobDetails/${jobId}`)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('managerId').value = data.manager_id || '';
+                    document.getElementById('departmentId').value = data.department_id || '';
+                })
+                .catch(error => {
+                    console.error('Error fetching job details:', error);
+                });
+        } else {
+            document.getElementById('managerId').value = '';
+            document.getElementById('departmentId').value = '';
+        }
     });
 });

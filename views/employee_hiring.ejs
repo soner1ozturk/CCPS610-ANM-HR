@@ -25,9 +25,7 @@
             <input type="number" id="salary" name="salary" required>
             <label for="jobId">Job ID:</label>
             <select id="jobId" name="jobId" required>
-                <option value="1">SA_REP - Sales Representative</option>
-                <option value="2">AC_MGR - Accounting Manager</option>
-                <option value="3">FI_ACCOUNT - Financial Accountant</option>
+                <!-- Options will be populated dynamically -->
             </select>
             <label for="managerId">Manager ID:</label>
             <input type="text" id="managerId" name="managerId" required>
@@ -35,8 +33,71 @@
             <input type="text" id="departmentId" name="departmentId" required>
             <button type="submit">Hire</button>
         </form>
+        <div id="hireMessage"></div>
     </div>
     <%- include('footer') %>
     <script src="/js/scripts.js"></script>
+    <script>
+        document.getElementById('hiringForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = new FormData(this);
+            const formObject = Object.fromEntries(formData.entries());
+            fetch('/hire_employee', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formObject)
+            })
+            .then(response => response.json())
+            .then(data => {
+                const messageDiv = document.getElementById('hireMessage');
+                if (data.message) {
+                    messageDiv.textContent = data.message;
+                    messageDiv.style.color = 'green';
+                } else {
+                    messageDiv.textContent = 'Error hiring employee.';
+                    messageDiv.style.color = 'red';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('hireMessage').textContent = 'Error hiring employee.';
+                document.getElementById('hireMessage').style.color = 'red';
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/jobs')
+                .then(response => response.json())
+                .then(data => {
+                    const jobSelect = document.getElementById('jobId');
+                    data.jobs.forEach(job => {
+                        const option = document.createElement('option');
+                        option.value = job.job_id;
+                        option.text = `${job.job_id} - ${job.job_title}`;
+                        jobSelect.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching jobs:', error));
+
+            const jobSelect = document.getElementById('jobId');
+            jobSelect.addEventListener('change', function () {
+                const jobId = jobSelect.value;
+                if (jobId) {
+                    fetch(`/jobDetails/${jobId}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            document.getElementById('managerId').value = data.manager_id || '';
+                            document.getElementById('departmentId').value = data.department_id || '';
+                        })
+                        .catch(error => console.error('Error fetching job details:', error));
+                } else {
+                    document.getElementById('managerId').value = '';
+                    document.getElementById('departmentId').value = '';
+                }
+            });
+        });
+    </script>
 </body>
 </html>

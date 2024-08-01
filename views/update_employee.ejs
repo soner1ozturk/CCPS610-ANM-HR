@@ -3,26 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Employee Information - ANM HR</title>
+    <title>Update Employee - ANM HR</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
     <%- include('navbar') %>
     <div class="form-container">
-        <h1>Update Employee Information</h1>
-        <form id="updateForm">
-            <label for="employeeId">Employee ID:</label>
-            <input type="text" id="employeeId" name="employeeId" required>
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email">
-            <label for="phone">Phone:</label>
-            <input type="text" id="phone" name="phone">
-            <label for="salary">Salary:</label>
-            <input type="number" id="salary" name="salary">
-            <button type="submit">Update</button>
-        </form>
+        <h1>Update Employee</h1>
+        <input type="text" id="searchTerm" placeholder="Enter name or employee ID">
+        <button onclick="searchEmployee()">Search</button>
+        <button onclick="listAllEmployees()">List All Employees</button>
+        <div id="employeeList" style="display:none;">
+            <table class="results-table">
+                <thead>
+                    <tr>
+                        <th>Employee ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Salary</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="employeeTableBody">
+                    <!-- Employees will be populated here dynamically -->
+                </tbody>
+            </table>
+        </div>
     </div>
     <%- include('footer') %>
-    <script src="/js/scripts.js"></script>
+    <script src="/js/update_employee.js"></script>
 </body>
 </html>

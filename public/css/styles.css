@@ -34,15 +34,18 @@ body {
 }
 
 .navbar-brand {
+    display: flex;
+    align-items: center;
     color: #fff;
     font-size: 24px;
     text-decoration: none;
 }
 
 .logo {
-    height: 50px;
+    height: 70px; 
+    max-width: 70px; 
+    margin-right: 10px;
 }
-
 .navbar-nav {
     list-style: none;
     margin: 0;
@@ -159,4 +162,58 @@ button:hover {
     right: 0;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.results-table th, .results-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+.results-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #4CAF50;
+    color: white;
+}
+
+.results-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.results-table tr:hover {
+    background-color: #ddd;
+}
+
+.form-container button {
+    display: inline-block;
+    margin: 5px;
+}
+
+#employeeTableBody .action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#employeeTableBody .action-buttons button {
+    flex: none;
+    width: auto;
+    margin: 0;
+}
+
+#jobTableBody .action-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+#jobTableBody .action-buttons button {
+    flex: none;
+    width: auto;
+    margin: 0;
 }
