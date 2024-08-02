@@ -9,6 +9,13 @@ app.use(express.json());
 app.use(express.static('public'));
 app.set('view engine', 'ejs');
 
+// Function to extract relevant error message
+function extractRelevantErrorMessage(errorMessage) {
+    const regex = /ORA-\d{5}:[^]+?(?=ORA-\d{5}:|$)/;
+    const match = errorMessage.match(regex);
+    return match ? match[0] : errorMessage;
+}
+
 // Home route
 app.get('/', (req, res) => {
     res.render('index');
@@ -89,7 +96,6 @@ app.get('/jobDetails/:jobId', async (req, res) => {
         }
     }
 });
-
 // Route to hire employee using the stored procedure
 app.post('/hire_employee', async (req, res) => {
     const { firstName, lastName, email, phone, hireDate, salary, jobId, managerId, departmentId } = req.body;
@@ -113,7 +119,8 @@ app.post('/hire_employee', async (req, res) => {
         res.json({ message: 'Employee hired successfully!' });
     } catch (err) {
         console.error('Error hiring employee:', err);
-        res.status(500).send(`Error hiring employee: ${err.message}`);
+        const extractedMessage = extractRelevantErrorMessage(err.message);
+        res.status(500).json({ message: `Error hiring employee: ${extractedMessage}` });
     } finally {
         if (connection) {
             try {
@@ -124,6 +131,7 @@ app.post('/hire_employee', async (req, res) => {
         }
     }
 });
+
 
 // Route to fetch all employees
 app.get('/all_employees', async (req, res) => {
@@ -166,7 +174,8 @@ app.post('/update_employee_info', async (req, res) => {
         res.json({ message: 'Employee updated successfully!' });
     } catch (err) {
         console.error('Error updating employee:', err);
-        res.status(500).send(`Error updating employee: ${err.message}`);
+        const extractedMessage = extractRelevantErrorMessage(err.message);
+        res.status(500).json({ message: `Error updating employee: ${extractedMessage}` });
     } finally {
         if (connection) {
             try {

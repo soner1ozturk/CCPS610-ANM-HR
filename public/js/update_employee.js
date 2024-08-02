@@ -2,6 +2,13 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('employeeList').style.display = 'none';
 });
 
+// Function to extract relevant error message
+function extractRelevantErrorMessage(errorMessage) {
+    const regex = /ORA-\d{5}:[^]+?(?=ORA-\d{5}:|$)/;
+    const match = errorMessage.match(regex);
+    return match ? match[0] : errorMessage;
+}
+
 async function searchEmployee() {
     const searchTerm = document.getElementById('searchTerm').value.trim().toLowerCase();
     if (!searchTerm) {
@@ -83,8 +90,15 @@ async function updateEmployee(employeeId) {
         });
 
         const data = await response.json();
-        alert(data.message);
+
+        if (response.ok) {
+            alert(data.message);
+        } else {
+            const errorMessage = extractRelevantErrorMessage(data.message);
+            document.getElementById('errorMessage').innerText = `Error updating employee: ${errorMessage}`;
+        }
     } catch (error) {
+        document.getElementById('errorMessage').innerText = 'Error updating employee.';
         console.error('Error updating employee:', error);
     }
 }
@@ -108,3 +122,4 @@ async function deleteEmployee(employeeId) {
         }
     }
 }
+
