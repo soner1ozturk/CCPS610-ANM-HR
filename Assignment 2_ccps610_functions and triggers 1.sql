@@ -74,3 +74,94 @@ FOR EACH ROW
 BEGIN
     CHECK_SALARY(:NEW.JOB_ID, :NEW.SALARY);
 END EMP_SALARY_CHECK;
+
+
+
+--Task 2-1 
+CREATE OR REPLACE FUNCTION get_job (p_job_id VARCHAR2)
+RETURN VARCHAR2
+IS
+  v_job_title HR_JOBS.JOB_TITLE%TYPE;
+BEGIN
+  SELECT JOB_TITLE
+  INTO v_job_title
+  FROM HR_JOBS
+  WHERE JOB_ID = p_job_id;
+
+  RETURN v_job_title;
+EXCEPTION
+  WHEN NO_DATA_FOUND THEN
+    RETURN 'Job ID not found';
+  WHEN OTHERS THEN
+    RETURN 'An error occurred';
+END;
+/
+
+--test to see if 2-1 works 
+DECLARE
+  v_job_title VARCHAR2(100);
+BEGIN
+  -- Call the get_job function with a specific job_id
+  v_job_title := get_job('IT_PROG');
+
+  -- Output the result
+  DBMS_OUTPUT.PUT_LINE('Job Title: ' || v_job_title);
+END;
+/
+
+
+
+-- Task 2-2
+--SQL procedure to update job
+CREATE OR REPLACE PROCEDURE update_job (
+    p_job_id      IN VARCHAR2,
+    p_job_title   IN VARCHAR2,
+    p_min_salary  IN NUMBER,
+    p_max_salary  IN NUMBER
+) 
+IS
+BEGIN
+    UPDATE HR_JOBS
+    SET 
+        JOB_TITLE = p_job_title,
+        MIN_SALARY = p_min_salary,
+        MAX_SALARY = p_max_salary
+    WHERE 
+        JOB_ID = p_job_id;
+
+    COMMIT;
+EXCEPTION
+    WHEN OTHERS THEN
+        ROLLBACK;
+        RAISE;
+END update_job;
+/
+
+
+
+
+--Task 2-3 
+CREATE OR REPLACE PROCEDURE new_job (
+    p_jobid IN hr_jobs.job_id%TYPE,
+    p_title IN hr_jobs.job_title%TYPE,
+    v_minsal IN hr_jobs.min_salary%TYPE
+) IS
+    v_maxsal hr_jobs.max_salary%TYPE := 2 * v_minsal;
+BEGIN
+    INSERT INTO hr_jobs (job_id, job_title, min_salary, max_salary)
+    VALUES (p_jobid, p_title, v_minsal, v_maxsal);
+
+    DBMS_OUTPUT.PUT_LINE('New row added to JOBS table:');
+    DBMS_OUTPUT.PUT_LINE(p_jobid || ' ' || p_title || ' ' || v_minsal || ' ' || v_maxsal);
+END new_job;
+/
+
+
+--testing 2-3 it works
+BEGIN
+    -- Call the new_job procedure with sample data
+    new_job(p_jobid => 'marco', p_title => 'HR marco', v_minsal => 5000);
+END;
+/
+
+select*from HR_jobs
